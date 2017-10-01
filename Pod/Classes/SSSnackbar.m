@@ -59,9 +59,9 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
         _messageLabel.font = [UIFont systemFontOfSize:14.0];
         _messageLabel.textColor = [UIColor whiteColor];
         [_messageLabel sizeToFit];
-
+        
         [self addSubview:_messageLabel];
-
+        
         if (actionText != nil) {
             _actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             _actionButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -72,11 +72,11 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
             [_actionButton addTarget:self
                               action:@selector(executeAction:)
                     forControlEvents:UIControlEventTouchUpInside];
-        
+            
             _separator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
             _separator.backgroundColor = [UIColor colorWithWhite:0.99 alpha:.1];
             _separator.translatesAutoresizingMaskIntoConstraints = NO;
-
+            
             [self addSubview:_actionButton];
             [self addSubview:_separator];
         }
@@ -225,7 +225,7 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
         [self executeActionBlock];
         [self dismissAnimated:YES];
     }
-
+    
 }
 
 - (void)executeDismissalBlock {
@@ -242,7 +242,7 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
 
 - (NSArray *)hiddenVerticalLayoutConstraints {
     if (!_hiddenVerticalLayoutConstraints) {
-    
+        
         _hiddenVerticalLayoutConstraints =
         [NSLayoutConstraint constraintsWithVisualFormat:@"V:[self(44)]-(-50)-|"
                                                 options:0
@@ -285,19 +285,27 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
 }
 
 // This must be called after the snackbar is added to a view
-// Otherwise 
+// Otherwise
 - (void)setupContentLayout {
     NSMutableArray *constraints = [NSMutableArray new];
-    [constraints addObjectsFromArray:
-     [NSLayoutConstraint constraintsWithVisualFormat:@"|-8-[_messageLabel]-(>=8)-[_separator(1)]-8-[_actionButton]-8-|"
-                                             options:NSLayoutFormatAlignAllCenterY
-                                             metrics:nil
-                                               views:NSDictionaryOfVariableBindings(_messageLabel, _actionButton, _separator)]];
-    [constraints addObjectsFromArray:
-     [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_separator]-0-|"
-                                             options:0
-                                             metrics:nil
-                                               views:NSDictionaryOfVariableBindings(_separator)]];
+    if (_actionButton == nil) {
+        [constraints addObjectsFromArray:
+         [NSLayoutConstraint constraintsWithVisualFormat:@"|-8-[_messageLabel]-8-|"
+                                                 options:NSLayoutFormatAlignAllCenterY
+                                                 metrics:nil
+                                                   views:NSDictionaryOfVariableBindings(_messageLabel)]];
+    } else {
+        [constraints addObjectsFromArray:
+         [NSLayoutConstraint constraintsWithVisualFormat:@"|-8-[_messageLabel]-(>=8)-[_separator(1)]-8-[_actionButton]-8-|"
+                                                 options:NSLayoutFormatAlignAllCenterY
+                                                 metrics:nil
+                                                   views:NSDictionaryOfVariableBindings(_messageLabel, _actionButton, _separator)]];
+        [constraints addObjectsFromArray:
+         [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_separator]-0-|"
+                                                 options:0
+                                                 metrics:nil
+                                                   views:NSDictionaryOfVariableBindings(_separator)]];
+    }
     
     
     [constraints addObject:[NSLayoutConstraint constraintWithItem:_messageLabel
@@ -313,3 +321,4 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
 }
 
 @end
+
