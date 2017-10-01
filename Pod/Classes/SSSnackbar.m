@@ -59,24 +59,27 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
         _messageLabel.font = [UIFont systemFontOfSize:14.0];
         _messageLabel.textColor = [UIColor whiteColor];
         [_messageLabel sizeToFit];
-        
-        _actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        _actionButton.translatesAutoresizingMaskIntoConstraints = NO;
-        _actionButton.titleLabel.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightBold];
-        [_actionButton setTitle:actionText forState:UIControlStateNormal];
-        [_actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_actionButton sizeToFit];
-        [_actionButton addTarget:self
-                          action:@selector(executeAction:)
-                forControlEvents:UIControlEventTouchUpInside];
-        
-        _separator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-        _separator.backgroundColor = [UIColor colorWithWhite:0.99 alpha:.1];
-        _separator.translatesAutoresizingMaskIntoConstraints = NO;
-        
+
         [self addSubview:_messageLabel];
-        [self addSubview:_actionButton];
-        [self addSubview:_separator];
+
+        if (actionText != nil) {
+            _actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            _actionButton.translatesAutoresizingMaskIntoConstraints = NO;
+            _actionButton.titleLabel.font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightBold];
+            [_actionButton setTitle:actionText forState:UIControlStateNormal];
+            [_actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [_actionButton sizeToFit];
+            [_actionButton addTarget:self
+                              action:@selector(executeAction:)
+                    forControlEvents:UIControlEventTouchUpInside];
+        
+            _separator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+            _separator.backgroundColor = [UIColor colorWithWhite:0.99 alpha:.1];
+            _separator.translatesAutoresizingMaskIntoConstraints = NO;
+
+            [self addSubview:_actionButton];
+            [self addSubview:_separator];
+        }
         
         self.opaque = NO;
     }
