@@ -256,8 +256,14 @@ static SSSnackbar *currentlyVisibleSnackbar = nil;
 - (NSArray *)visibleVerticalLayoutConstraints {
     if (!_visibleVerticalLayoutConstraints) {
         
+        int bottomOffset = 5;
+        if (@available(iOS 11.0, *)) {
+            UIWindow *window = UIApplication.sharedApplication.keyWindow;
+            bottomOffset = window.safeAreaInsets.bottom;
+        }
+
         _visibleVerticalLayoutConstraints =
-        [NSLayoutConstraint constraintsWithVisualFormat:@"V:[self(44)]-(5)-|"
+        [NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[self(44)]-(%d)-|", bottomOffset]
                                                 options:0
                                                 metrics:nil
                                                   views:NSDictionaryOfVariableBindings(self)];
